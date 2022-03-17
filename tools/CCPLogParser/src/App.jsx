@@ -27,9 +27,9 @@ import Box from '@material-ui/core/Box';
 import Typography from '@material-ui/core/Typography';
 import Link from '@material-ui/core/Link';
 import DescriptionIcon from '@material-ui/icons/Description';
-import FeedbackIcon from '@material-ui/icons/Feedback';
+// import FeedbackIcon from '@material-ui/icons/Feedback';
 import './App.css';
-import pkg from '../package.json';
+// import pkg from '../package.json';
 import EmptyView from './EmptyView';
 import DraggingView from './DraggingView';
 import LoadingView from './LoadingView';
@@ -117,6 +117,9 @@ const styles = (theme) => ({
     },
     leftIcon: {
         marginRight: theme.spacing(1),
+    },
+    logo: {
+        width: '10%',
     },
     rightIcon: {
         marginLeft: theme.spacing(1),
@@ -253,26 +256,14 @@ class App extends React.Component {
                             <div {...getRootProps()}>
                                 <AppBar position="static" className={classes.appbar}>
                                     <Toolbar variant="dense">
+                                        <img src="https://patientsync-icons.s3.amazonaws.com/R3_PatientSync_Logo_Clr_Reversed_Horizontal.png" alt="logo" className={classes.logo} />
                                         <Typography variant="h6" color="inherit" className={classes.title}>
-                                            CCP Log Parser
                                             { filename && (
                                                 <span>
                                                     &nbsp;:&nbsp;
                                                     {filename}
                                                 </span>
                                             ) }
-                                        </Typography>
-                                        <Typography color="inherit" className={classes.feedbackLink}>
-                                            <Link
-                                                href="https://github.com/amazon-connect/amazon-connect-snippets/blob/master/tools/CCPLogParser/CHANGELOG.md"
-                                                target="_blank"
-                                                rel="noopener"
-                                                onClick={(e) => e.preventDefault}
-                                            >
-                                                Version:
-                                                {' '}
-                                                {pkg.version}
-                                            </Link>
                                         </Typography>
                                         <Typography color="inherit" className={classes.feedbackLink}>
                                             <Link
@@ -283,17 +274,6 @@ class App extends React.Component {
                                             >
                                                 <DescriptionIcon className={classes.leftIcon} />
                                                 User Guide
-                                            </Link>
-                                        </Typography>
-                                        <Typography color="inherit" className={classes.feedbackLink}>
-                                            <Link
-                                                href="https://github.com/amazon-connect/amazon-connect-snippets/issues"
-                                                target="_blank"
-                                                rel="noopener"
-                                                onClick={(e) => e.preventDefault}
-                                            >
-                                                <FeedbackIcon className={classes.leftIcon} />
-                                                Send Feedback
                                             </Link>
                                         </Typography>
                                     </Toolbar>
