@@ -1,7 +1,7 @@
 name: deploy-ccpLogParser
 
 on:
-  pull_request:
+  push_request:
     branches: [master]
     types: [closed]
 jobs:
