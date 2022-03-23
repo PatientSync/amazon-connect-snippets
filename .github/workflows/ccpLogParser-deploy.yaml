@@ -1,4 +1,4 @@
-name: deploy-ps_container
+name: deploy-ccpLogParser
 
 on: 
   push:
