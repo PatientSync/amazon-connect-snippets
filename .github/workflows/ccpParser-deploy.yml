@@ -1,0 +1,31 @@
+name: deploy-ps_container
+
+on: 
+  push:
+    branches:
+      - main
+      - master
+    paths:  
+      - 'tools/CCPLogParser/**'
+
+defaults:
+  run:
+    working-directory: tools/CCPLogParser
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2    
+      - run: npm install
+      - run: npm run build
+        env:
+      - uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: us-east-1      
+      - run: aws s3 sync dist s3://${{ secrets.AWS_S3_BUCKET_NAME }}/CCPLogParser/latest
+
+      - run: aws cloudfront create-invalidation --distribution-id ${{ secrets.AWS_DISTRIBUTION_ID }} --paths "/CCPLogParser/*"
