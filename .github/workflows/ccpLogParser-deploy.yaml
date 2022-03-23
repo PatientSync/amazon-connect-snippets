@@ -1,4 +1,4 @@
-name: deploy-ccpLogParser
+name: deploy-ccpLogParser-s3
 
 on:
   pull_request:
