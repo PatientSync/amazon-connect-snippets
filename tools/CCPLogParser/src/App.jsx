@@ -12,7 +12,7 @@
 ***************************************************************************** */
 
 /* eslint-disable no-underscore-dangle */
-//change
+// change
 import React, { createRef } from 'react';
 import PropTypes from 'prop-types';
 import Dropzone from 'react-dropzone';
