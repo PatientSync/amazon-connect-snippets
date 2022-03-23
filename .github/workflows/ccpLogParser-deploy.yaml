@@ -1,31 +1,40 @@
 name: deploy-ccpLogParser
 
-on: 
-  push:
-    branches:
-      - main
-      - master
-    paths:  
-      - 'tools/CCPLogParser/**'
-
-defaults:
-  run:
-    working-directory: tools/CCPLogParser
-
+on:
+  pull_request:
+    branches: [master]
+    types: [closed]
 jobs:
-  build:
+  deploy:
     runs-on: ubuntu-latest
-
+    strategy:
+      matrix:
+        node-version: [10.x]
     steps:
-      - uses: actions/checkout@v2    
-      - run: npm install
-      - run: npm run build
-        env:
-      - uses: aws-actions/configure-aws-credentials@v1
+      - uses: actions/checkout@master
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v1
         with:
-          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          aws-region: us-east-1      
-      - run: aws s3 sync dist s3://${{ secrets.AWS_S3_BUCKET_NAME }}/CCPLogParser/latest
-
-      - run: aws cloudfront create-invalidation --distribution-id ${{ secrets.AWS_DISTRIBUTION_ID }} --paths "/CCPLogParser/*"
+          node-version: ${{ matrix.node-version }}
+      - name: Install Dependencies
+        run: npm install
+      - name: Build Application
+        run: npm run-script build
+      - uses: jakejarvis/s3-sync-action@master
+        name: Upload App to S3 Bucket
+        with:
+          args: --follow-symlinks --delete
+        env:
+          AWS_S3_BUCKET: ${{ env.AWS_S3_BUCKET_NAME }}
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          AWS_REGION: "us-east-1"
+          SOURCE_DIR: "build"
+      - name: Create CloudFront Cache Invalidation
+        uses: chetan/invalidate-cloudfront-action@master
+        env:
+          DISTRIBUTION: ${{ env.AWS_DISTRIBUTION_ID }}
+          PATHS: "tools/CCPLogParser/*"
+          AWS_REGION: "us-east-1"
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
