@@ -20,7 +20,7 @@ jobs:
       - run: npm install
       - run: npm run build
        env:
-          AWS_S3_BUCKET_NAME: patientsync-diagnostic-tools
+          AWS_S3_BUCKET_NAME: 'patientsync-diagnostic-tools'
           AWS_DISTRIBUTION_ID: ${{ secrets.AWS_DISTRIBUTION_ID }}
       - uses: aws-actions/configure-aws-credentials@v1
         with:
