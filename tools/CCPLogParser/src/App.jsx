@@ -12,7 +12,6 @@
 ***************************************************************************** */
 
 /* eslint-disable no-underscore-dangle */
-// commit to workflows
 import React, { createRef } from 'react';
 import PropTypes from 'prop-types';
 import Dropzone from 'react-dropzone';
